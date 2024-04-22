@@ -2210,6 +2210,8 @@ namespace Intersect.Client.Localization
                 {10, @"Sleep"},
                 {11, @"On-Hit"},
                 {12, @"Taunt"},
+                {13, @"Knockback"},
+                {14, @"Bonus EXP"},
             };
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -2257,19 +2259,16 @@ namespace Intersect.Client.Localization
                 {10, @"Makes the target fall asleep"},
                 {11, @"Applies an On Hit effect to the target"},
                 {12, @"Taunts Target"},
+                {13, @"Knockback"},
+                {14, @"Experience Bonus"},
             };
-
         }
 
         public partial struct Spells
         {
-
             public static LocalizedString forgetspell = @"Forget Spell";
-
             public static LocalizedString forgetspellprompt = @"Are you sure you want to forget {00}?";
-
             public static LocalizedString title = @"Spells";
-
         }
 
         public partial struct Trading

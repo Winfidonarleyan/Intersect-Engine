@@ -536,6 +536,15 @@ namespace Intersect.Editor.Forms.Editors
             lblSprite.Visible = false;
             cmbTransform.Visible = false;
             picSprite.Visible = false;
+            
+            if (mEditorItem.Combat.Effect == SpellEffect.BonusEXP)
+            {
+                lblScaling.Text = Strings.SpellEditor.scalingamount.ToString().Replace("%", "EXP %");
+            }
+            else
+            {
+                lblScaling.Text = Strings.SpellEditor.scalingamount;
+            }
 
             if (cmbExtraEffect.SelectedIndex == 6) //Transform
             {

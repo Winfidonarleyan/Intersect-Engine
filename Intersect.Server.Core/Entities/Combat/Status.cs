@@ -94,6 +94,11 @@ namespace Intersect.Server.Entities.Combat
                 }
             }
 
+            if (type == SpellEffect.BonusEXP)
+            {
+                this.Data = spell.Combat.Scaling.ToString();
+            }
+
             // Interrupt their spellcast if we are running a Silence, Sleep or Stun!
             if (InterruptStatusses.Contains(type))
             {

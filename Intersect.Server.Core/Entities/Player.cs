@@ -1313,7 +1313,7 @@ namespace Intersect.Server.Entities
                         {
                             var partyMembersInXpRange = Party.Where(partyMember => partyMember.InRangeOf(this, Options.Party.SharedXpRange)).ToArray();
                             float bonusExp = Options.Instance.PartyOpts.BonusExperiencePercentPerMember / 100;
-                            var multiplier = 1.0f + (partyMembersInXpRange.Length * bonusExp);
+                            var multiplier = 1.0f + ((float)GetExpMultiplier() / 100f) + (partyMembersInXpRange.Length * bonusExp);
                             var partyExperience = (int)(descriptor.Experience * multiplier) / partyMembersInXpRange.Length;
                             foreach (var partyMember in partyMembersInXpRange)
                             {
@@ -1334,7 +1334,7 @@ namespace Intersect.Server.Entities
                         }
                         else
                         {
-                            GiveExperience(descriptor.Experience);
+                            GiveExperience((long)(descriptor.Experience * (1 + ((float)GetExpMultiplier() / 100f))));
                             UpdateQuestKillTasks(entity);
                         }
 
@@ -3740,6 +3740,43 @@ namespace Intersect.Server.Entities
             }
 
             return value;
+        }
+        
+        public int GetExpMultiplier()
+        {
+            var exp = 0;
+
+            foreach (var status in CachedStatuses)
+            {
+                if (status.Type == SpellEffect.BonusEXP)
+                {
+                    var expBonus = int.Parse(status.Data);
+
+                    exp += expBonus;
+                }
+            }
+
+            for (var i = 0; i < Options.EquipmentSlots.Count; i++)
+            {
+                if (Equipment[i] > -1)
+                {
+                    if (Items[Equipment[i]].ItemId != Guid.Empty)
+                    {
+                        var item = ItemBase.Get(Items[Equipment[i]].ItemId);
+                        if (item != null)
+                        {
+                            var bonusExpEffect = item.Effects.FirstOrDefault(x => x.Type == ItemEffect.EXP);
+
+                            if (bonusExpEffect != null)
+                            {
+                                exp += bonusExpEffect.Percentage;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return exp;
         }
 
         public int GetEquipmentVitalRegen(Vital vital)
